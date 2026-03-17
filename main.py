@@ -47,7 +47,23 @@ def ask_anthropic(prompt):
         messages=[{"role": "user", "content": prompt}]
     )
     return msg.content[0].text
+# ========================
+# MEMORY STORAGE
+# ========================
 
+memory = {}
+
+def update_memory(user_id, message):
+    if user_id not in memory:
+        memory[user_id] = []
+
+    memory[user_id].append(message)
+
+    # limit memory (last 10 messages)
+    memory[user_id] = memory[user_id][-10:]
+
+def get_memory_context(user_id):
+    return "\n".join(memory.get(user_id, []))
 # ========================
 # SMART ROUTER
 # ========================
